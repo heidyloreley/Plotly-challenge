@@ -23,12 +23,12 @@ function init() {
 
     // Get values to plot initial information
     d3.json("data/samples.json").then((d) => {
-
-        console.log(d);
+        // console.log(d);
         var IDs = d.names;
         var selectedId = IDs[0];
-        getData(selectedId)
-        console.log(selectedId);     
+        // console.log(selectedId);   
+
+        getData(selectedId)  
     });
 };
 init();
@@ -36,51 +36,26 @@ init();
 
 // ----------------------3. Update Plots on Change of option Function ------------------------
 
-// On change to the DOM, call optionChanged()
-// d3.selectAll("#selDataset").on("change", optionChanged);  // cada vez que cambie #selDataset // ICAN  
-
 function optionChanged(selectedId) {
-    // var dropdownMenu = document.getElementById("selDataset");
-    // var selectedId = dropdownMenu.options[dropdownMenu.selectedIndex].text;
-    // console.log(selectedId);
 
     // Obtain graph information based on selected Id
-
     getData(selectedId)
-
-    
-    // var data = []
-    // var data = [getData]
-
-    // // Call function to update the chart
-    // updatePlotly(data);  // nuevo data para generar el trace
-// };
-
-// // Update the restyled plot's values
-// function updatePlotly(newdata) {
-//     var layout = {
-//         title: "Top 10 OTUS",
-//         xaxis: { title: "Sample Values" },
-//         yaxis: { title: "OTUS ids" },
-//     };
-//     Plotly.restyle("bar", [newdata], layout);
 };
-// optionChanged();
 
 
-// ----------------------4. GetData Function for any DropdownValue selected  ------------------------
+
+// ----------------------4. GetData Function for any DropdownValue selected  & Plot graphs and Info------------------------
 function getData(selectedId) {
 
     // / Get values to plot information
     d3.json("data/samples.json").then((d) => {
 
         console.log(d);
-        var IDs = d.names;
 
-        var FilteredInfo = d.samples.filter(row => row.id === selectedId);
+        var FilteredInfo = d.samples.filter(row => row.id === selectedId); //d.samples is an array of objects [{},{},...{}], so filter gets an array of 1 object [{}] 
         console.log(FilteredInfo)
 
-        var values = FilteredInfo[0].sample_values;
+        var values = FilteredInfo[0].sample_values;  // to use the object in FilteredInfo, get it from inside the array it is by using the [0]
         var otuID = FilteredInfo[0].otu_ids;
         var otuLabel = FilteredInfo[0].otu_labels;
 
@@ -149,11 +124,10 @@ function getData(selectedId) {
 
 
         // Information for Demographic Table
-        console.log(d);
         var demographics = d.metadata;
-        console.log(demographics); //obtengo un Array de Objects [{k:v,k:v,...,k:v},{k:v,k:v,...,k:v},...{k:v,k:v,...,k:v}] 
+        console.log(demographics); //I get an Array of Objects [{k:v,k:v,...,k:v},{k:v,k:v,...,k:v},...{k:v,k:v,...,k:v}] 
 
-        var IdDemoInfo = demographics.filter(Idselected => Idselected.id == selectedId)[0];
+        var IdDemoInfo = demographics.filter(Idselected => Idselected.id == selectedId)[0]; // the filter gets [{}], so use [0] to get just the object
         console.log(IdDemoInfo);
 
         var panelBody = d3.select(".panel-body");
@@ -163,7 +137,5 @@ function getData(selectedId) {
         Object.entries(IdDemoInfo).forEach(([k, v]) => {
             panelBody.append("p").text(`${k}:${v}\n`)
         });
-
-
     });
 };
