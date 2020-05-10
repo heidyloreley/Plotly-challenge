@@ -1,5 +1,5 @@
 
-// ----------------------VERSION 3 ------------------------
+// ----------------------VERSION 4 ------------------------
 
 // ----------------------1. Build DropdownOptions Function /  Get IDs + Showthem in dropdown menu------------------------
 // function DropdownOptions(selectedId){
@@ -28,7 +28,7 @@ function init() {
         var selectedId = IDs[0];
         // console.log(selectedId);   
 
-        getData(selectedId)  
+        getData(selectedId)
     });
 };
 init();
@@ -137,5 +137,42 @@ function getData(selectedId) {
         Object.entries(IdDemoInfo).forEach(([k, v]) => {
             panelBody.append("p").text(`${k}:${v}\n`)
         });
+
+        // BONUS //  CREATE GAUGE CHART
+        // Information for Bubble Chart
+        var washFrqValue = IdDemoInfo.wfreq;
+        console.log(washFrqValue);
+
+        var trace3 = {
+            domain: {
+                x: [0,1],
+                y: [0,1]},
+            value: washFrqValue,
+            title: { text: "Scrubs per Week" },
+            type: "indicator",
+            mode: "gauge+number",
+            gauge: {
+                axis: { range: [null, 9] },
+                steps: [
+                    { text: "0-1", range: [0, 1], color: "#FFFFF0" },
+                    { range: [1, 2], color: "#FFFFF0" },
+                    { range: [2, 3], color: "#f5f5dc" },
+                    { range: [3, 4], color: "#ffffcc" },
+                    { range: [4, 5], color: "#99cc00" },
+                    { range: [5, 6], color: "#77b300" },
+                    { range: [6, 7], color: "#00cc66" },
+                    { range: [7, 8], color: "#00cc00" },
+                    { range: [7, 9], color: "#008000" }
+                ],
+            }
+        };
+
+        var gaugedata = [trace3];
+
+        var gaugelayout = {
+            title: "Belly Button Washing Frequency"
+        };
+
+        Plotly.newPlot("gauge", gaugedata, gaugelayout)
     });
 };
